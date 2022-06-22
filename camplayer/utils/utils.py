@@ -29,7 +29,7 @@ pi_revisions = {
     "d03114": {"model": "4B 8GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
     "b03114": {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
     "c03114": {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "d03115": {"model": "4B 8GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "d03115": {"model": "Raspberry Pi 4 Model B Rev 1.5",      "supported": True, "dual_hdmi": True,  "hevc": True},
     "c03130": {"model": "PI 400 4GB",  "supported": True, "dual_hdmi": True,  "hevc": True},
     "9020e0": {"model": "3A+",         "supported": True, "dual_hdmi": False, "hevc": False},
 }
