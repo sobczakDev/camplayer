@@ -73,15 +73,21 @@ def get_hardware_info():
                 serial = line.split(':')[1].strip()
             elif "hardware" in line.lower():
                 soc = line.split(':')[1].strip()
+        print('revision', revision)
+        print('serial', serial)
+        print('soc', soc)
 
         if revision:
             rev_map = pi_revisions.get(revision, model)
+            print('rev_map', rev_map)
 
             if rev_map:
                 model = rev_map.get("model")
                 supported = rev_map.get('supported')
                 dual_hdmi = rev_map.get('dual_hdmi')
                 hevc_decoder = rev_map.get('hevc')
+            print('supported', supported)
+            print('model', model)
     except:
         pass
 
