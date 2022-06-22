@@ -72,9 +72,11 @@ def main():
                 print("         -v  --version               Print version info")
                 print("         -c  --config                Use a specific config file")
                 print("             --rebuild-cache         Rebuild cache on startup")
-                print("             --rebuild-cache-exit    Rebuild cache and exit afterwards")
+                print(
+                    "             --rebuild-cache-exit    Rebuild cache and exit afterwards")
                 print("         -d  --demo                  Demo mode")
-                print("             --ignorequit            Don't quit when the 'Q' key is pressed")
+                print(
+                    "             --ignorequit            Don't quit when the 'Q' key is pressed")
                 sys.exit(0)
 
             # Run in a specific mode
@@ -118,7 +120,7 @@ def main():
     signal.signal(signal.SIGTERM, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)
 
-    LOG.INFO(_LOG_NAME, "Starting camplayer version %s" % __version__)
+    LOG.INFO(_LOG_NAME, "Starting Camplayer version %s" % __version__)
     LOG.INFO(_LOG_NAME, "Using config file '%s' and cache directory '%s'"
              % (CONSTANTS.CONFIG_PATH, CONSTANTS.CACHE_DIR))
 
@@ -141,27 +143,35 @@ def main():
     hw_info = utils.get_hardware_info()
 
     # Set some globals for later use
-    GLOBALS.PI_SOC          = hw_info.get("soc")    # Not very reliable, usually reports BCM2835
-    GLOBALS.PI_MODEL        = hw_info.get("model")
-    GLOBALS.PI_SOC_HEVC     = hw_info.get('hevc')
-    GLOBALS.NUM_DISPLAYS    = 2 if hw_info.get('dual_hdmi') else 1
-    GLOBALS.VLC_SUPPORT     = utils.os_package_installed("vlc")
-    GLOBALS.PIPNG_SUPPORT   = utils.os_package_installed("pipng")
-    GLOBALS.FFMPEG_SUPPORT  = utils.os_package_installed("ffmpeg")
-    GLOBALS.USERNAME        = os.getenv('USER')
+    # Not very reliable, usually reports BCM2835
+    GLOBALS.PI_SOC = hw_info.get("soc")
+    GLOBALS.PI_MODEL = hw_info.get("model")
+    GLOBALS.PI_SOC_HEVC = hw_info.get('hevc')
+    GLOBALS.NUM_DISPLAYS = 2 if hw_info.get('dual_hdmi') else 1
+    GLOBALS.VLC_SUPPORT = utils.os_package_installed("vlc")
+    GLOBALS.PIPNG_SUPPORT = utils.os_package_installed("pipng")
+    GLOBALS.FFMPEG_SUPPORT = utils.os_package_installed("ffmpeg")
+    GLOBALS.USERNAME = os.getenv('USER')
 
     # Log system info
     LOG.INFO(_LOG_NAME, "********************** SYSTEM INFO **********************")
     LOG.INFO(_LOG_NAME, str("Camplayer version             = %s" % __version__))
     LOG.INFO(_LOG_NAME, str("Operating system              = %s" % sys_info))
-    LOG.INFO(_LOG_NAME, str("Raspberry Pi SoC              = %s" % hw_info.get("soc")))
-    LOG.INFO(_LOG_NAME, str("Raspberry Pi revision         = %s" % hw_info.get("revision")))
-    LOG.INFO(_LOG_NAME, str("Raspberry Pi model name       = %s" % hw_info.get("model")))
+    LOG.INFO(_LOG_NAME, str("Raspberry Pi SoC              = %s" %
+             hw_info.get("soc")))
+    LOG.INFO(_LOG_NAME, str("Raspberry Pi revision         = %s" %
+             hw_info.get("revision")))
+    LOG.INFO(_LOG_NAME, str("Raspberry Pi model name       = %s" %
+             hw_info.get("model")))
     LOG.INFO(_LOG_NAME, str("GPU memory allocation         = %i MB" % gpu_mem))
-    LOG.INFO(_LOG_NAME, str("Python version                = %s MB" % sys.version.splitlines()[0]))
-    LOG.INFO(_LOG_NAME, str("VLC installed                 = %s" % GLOBALS.VLC_SUPPORT))
-    LOG.INFO(_LOG_NAME, str("pipng installed               = %s" % GLOBALS.PIPNG_SUPPORT))
-    LOG.INFO(_LOG_NAME, str("ffmpeg installed              = %s" % GLOBALS.FFMPEG_SUPPORT))
+    LOG.INFO(_LOG_NAME, str("Python version                = %s MB" %
+             sys.version.splitlines()[0]))
+    LOG.INFO(_LOG_NAME, str("VLC installed                 = %s" %
+             GLOBALS.VLC_SUPPORT))
+    LOG.INFO(_LOG_NAME, str("pipng installed               = %s" %
+             GLOBALS.PIPNG_SUPPORT))
+    LOG.INFO(_LOG_NAME, str("ffmpeg installed              = %s" %
+             GLOBALS.FFMPEG_SUPPORT))
     LOG.INFO(_LOG_NAME, "*********************************************************")
 
     # Register for keyboard 'press' events, requires root
@@ -170,12 +180,14 @@ def main():
 
     # Log overwrites for debugging purpose
     for setting in CONFIG.advanced_overwritten:
-        LOG.INFO(_LOG_NAME, "advanced setting overwritten for '%s' is '%s'" % (setting[0], setting[1]))
+        LOG.INFO(_LOG_NAME, "advanced setting overwritten for '%s' is '%s'" %
+                 (setting[0], setting[1]))
 
     # Does this system fulfill the minimal requirements
     if CONFIG.HARDWARE_CHECK:
         if not hw_info.get("supported"):
-            sys.exit("Unsupported hardware with revision %s ..." % hw_info.get("revision"))
+            sys.exit("Unsupported hardware with revision %s ..." %
+                     hw_info.get("revision"))
 
         if gpu_mem < CONSTANTS.MIN_GPU_MEM:
             sys.exit("GPU memory of '%i' MB insufficient ..." % gpu_mem)
@@ -202,17 +214,22 @@ def main():
             GLOBALS.NUM_DISPLAYS = 1
 
     # Calculate the virtual screen size now that we now the physical screen size
-    CONSTANTS.VIRT_SCREEN_WIDTH = int(CONFIG.SCREEN_WIDTH * (100 - CONFIG.SCREEN_DOWNSCALE) / 100)
-    CONSTANTS.VIRT_SCREEN_HEIGHT = int(CONFIG.SCREEN_HEIGHT * (100 - CONFIG.SCREEN_DOWNSCALE) / 100)
-    CONSTANTS.VIRT_SCREEN_OFFSET_X = int((CONFIG.SCREEN_WIDTH - CONSTANTS.VIRT_SCREEN_WIDTH) / 2)
-    CONSTANTS.VIRT_SCREEN_OFFSET_Y = int((CONFIG.SCREEN_HEIGHT - CONSTANTS.VIRT_SCREEN_HEIGHT) / 2)
+    CONSTANTS.VIRT_SCREEN_WIDTH = int(
+        CONFIG.SCREEN_WIDTH * (100 - CONFIG.SCREEN_DOWNSCALE) / 100)
+    CONSTANTS.VIRT_SCREEN_HEIGHT = int(
+        CONFIG.SCREEN_HEIGHT * (100 - CONFIG.SCREEN_DOWNSCALE) / 100)
+    CONSTANTS.VIRT_SCREEN_OFFSET_X = int(
+        (CONFIG.SCREEN_WIDTH - CONSTANTS.VIRT_SCREEN_WIDTH) / 2)
+    CONSTANTS.VIRT_SCREEN_OFFSET_Y = int(
+        (CONFIG.SCREEN_HEIGHT - CONSTANTS.VIRT_SCREEN_HEIGHT) / 2)
     LOG.INFO(_LOG_NAME, "Using a virtual screen resolution of '%ix%i'" %
              (CONSTANTS.VIRT_SCREEN_WIDTH, CONSTANTS.VIRT_SCREEN_HEIGHT))
 
     # Workaround: srt subtitles have a maximum display time of 99 hours
     if CONFIG.VIDEO_OSD and (not CONFIG.REFRESHTIME_MINUTES or CONFIG.REFRESHTIME_MINUTES >= 99 * 60):
         CONFIG.REFRESHTIME_MINUTES = 99 * 60
-        LOG.WARNING(_LOG_NAME, "Subtitle based OSD enabled, forcing 'refreshtime' to '%i'" % CONFIG.REFRESHTIME_MINUTES)
+        LOG.WARNING(_LOG_NAME, "Subtitle based OSD enabled, forcing 'refreshtime' to '%i'" %
+                    CONFIG.REFRESHTIME_MINUTES)
 
     # Show 'loading' on master display
     BackGroundManager.show_icon_instant(BackGround.LOADING, display_idx=0)
@@ -235,7 +252,8 @@ def main():
             last_added = time.monotonic()
 
             if event.code in KEYCODE.KEY_NUM.keys():
-                LOG.DEBUG(_LOG_NAME, "Numeric key event: %i" % KEYCODE.KEY_NUM.get(event.code))
+                LOG.DEBUG(_LOG_NAME, "Numeric key event: %i" %
+                          KEYCODE.KEY_NUM.get(event.code))
 
                 num_array.append(KEYCODE.KEY_NUM.get(event.code))
 
@@ -283,7 +301,8 @@ def main():
         # 1 second delay to accept multiple digit numbers
         elif time.monotonic() > (last_added + (CONSTANTS.KEY_MULTIDIGIT_MS / 1000)) and len(num_array) > 0:
 
-            LOG.INFO(_LOG_NAME, "Process numeric key input '%s'" % str(num_array))
+            LOG.INFO(_LOG_NAME, "Process numeric key input '%s'" %
+                     str(num_array))
 
             number = 0
             number += num_array[-2] * 10 if len(num_array) > 1 else 0
