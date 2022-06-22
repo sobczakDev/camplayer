@@ -6,31 +6,32 @@ import time
 
 # Only supported revisions are listed at the moment
 # Non supported devices includes:
-#   - Devices without ethernet/WLAN 
+#   - Devices without ethernet/WLAN
 #   - Devices older than model 2
 # Source: https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
 pi_revisions = {
-    "9000c1" : {"model": "Zero W",      "supported": True, "dual_hdmi": False, "hevc": False},
-    "a01040" : {"model": "Zero W",      "supported": True, "dual_hdmi": False, "hevc": False},
-    "a01041" : {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a21041" : {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a22042" : {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a02082" : {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a32082" : {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a22082" : {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a52082" : {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a22083" : {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
-    "a020d3" : {"model": "3B+",         "supported": True, "dual_hdmi": False, "hevc": False},
-    "a03111" : {"model": "4B 1GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "b03111" : {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "c03111" : {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "b03112" : {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "c03112" : {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "d03114" : {"model": "4B 8GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "b03114" : {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "c03114" : {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
-    "c03130" : {"model": "PI 400 4GB",  "supported": True, "dual_hdmi": True,  "hevc": True},
-    "9020e0" : {"model": "3A+",         "supported": True, "dual_hdmi": False, "hevc": False},
+    "9000c1": {"model": "Zero W",      "supported": True, "dual_hdmi": False, "hevc": False},
+    "a01040": {"model": "Zero W",      "supported": True, "dual_hdmi": False, "hevc": False},
+    "a01041": {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a21041": {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a22042": {"model": "2B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a02082": {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a32082": {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a22082": {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a52082": {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a22083": {"model": "3B",          "supported": True, "dual_hdmi": False, "hevc": False},
+    "a020d3": {"model": "3B+",         "supported": True, "dual_hdmi": False, "hevc": False},
+    "a03111": {"model": "4B 1GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "b03111": {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "c03111": {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "b03112": {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "c03112": {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "d03114": {"model": "4B 8GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "b03114": {"model": "4B 2GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "c03114": {"model": "4B 4GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "d03115": {"model": "4B 8GB",      "supported": True, "dual_hdmi": True,  "hevc": True},
+    "c03130": {"model": "PI 400 4GB",  "supported": True, "dual_hdmi": True,  "hevc": True},
+    "9020e0": {"model": "3A+",         "supported": True, "dual_hdmi": False, "hevc": False},
 }
 
 
@@ -38,7 +39,8 @@ def get_gpu_memory():
     """Get the amount of memory allocated to the GPU in MB"""
 
     try:
-        response = subprocess.check_output(['vcgencmd', 'get_mem', 'gpu']).decode()
+        response = subprocess.check_output(
+            ['vcgencmd', 'get_mem', 'gpu']).decode()
 
         if response:
             response = re.findall('\d+', str(response))
@@ -51,7 +53,7 @@ def get_gpu_memory():
 
 def get_hardware_info():
     """Get hardware info (SoC, HW revision, S/N, Model name)"""
-    
+
     revision = ""
     serial = ""
     soc = ""
@@ -88,7 +90,7 @@ def get_hardware_info():
 
 
 def get_system_info():
-    """Get a description of this operation system""" 
+    """Get a description of this operation system"""
 
     try:
         return str(subprocess.check_output(
@@ -138,11 +140,11 @@ def terminate_process(PID, force=False):
 def get_display_mode(display=2):
     """Get current diplay mode (display 2 = HDMI0, display 7 = HDMI1)"""
 
-    hdmi_group  = 'Unknown'
-    hdmi_mode   = 0
-    res_width   = 0
-    res_height  = 0
-    framerate   = 0
+    hdmi_group = 'Unknown'
+    hdmi_mode = 0
+    res_width = 0
+    res_height = 0
+    framerate = 0
     device_name = ""
 
     try:
@@ -150,13 +152,14 @@ def get_display_mode(display=2):
             ['tvservice', '--device', str(display), '--status'],
             stderr=subprocess.STDOUT).decode().splitlines()[0]
 
-        tmp = re.search('^state.+(DMT|CEA).*\((\d+)\)[\s*\S*]* (\d+)x(\d+).+@ (\d+)', response)
+        tmp = re.search(
+            '^state.+(DMT|CEA).*\((\d+)\)[\s*\S*]* (\d+)x(\d+).+@ (\d+)', response)
         if tmp:
-            hdmi_group  = tmp.group(1)
-            hdmi_mode   = int(tmp.group(2))
-            res_width   = int(tmp.group(3))
-            res_height  = int(tmp.group(4))
-            framerate   = int(tmp.group(5))
+            hdmi_group = tmp.group(1)
+            hdmi_mode = int(tmp.group(2))
+            res_width = int(tmp.group(3))
+            res_height = int(tmp.group(4))
+            framerate = int(tmp.group(5))
 
         response = subprocess.check_output(
             ['tvservice', '--device', str(display), '--name'],
@@ -176,7 +179,7 @@ def os_package_installed(package):
 
     try:
         subprocess.check_output(['which', package],
-            stderr=subprocess.STDOUT).decode().splitlines()[0]
+                                stderr=subprocess.STDOUT).decode().splitlines()[0]
 
         return True
 
