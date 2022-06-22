@@ -4,6 +4,8 @@ import subprocess
 import re
 import time
 
+from camplayer.utils.logger import LOG
+
 # Only supported revisions are listed at the moment
 # Non supported devices includes:
 #   - Devices without ethernet/WLAN
@@ -73,21 +75,21 @@ def get_hardware_info():
                 serial = line.split(':')[1].strip()
             elif "hardware" in line.lower():
                 soc = line.split(':')[1].strip()
-        print('revision', revision)
-        print('serial', serial)
-        print('soc', soc)
+        LOG.INFO("utils", "revision %s" % revision)
+        LOG.INFO("utils", "serial %s" % serial)
+        LOG.INFO("utils", "soc %s" % soc)
 
         if revision:
             rev_map = pi_revisions.get(revision, model)
-            print('rev_map', rev_map)
+            LOG.INFO("utils", "rev_map %s" % rev_map)
 
             if rev_map:
                 model = rev_map.get("model")
                 supported = rev_map.get('supported')
                 dual_hdmi = rev_map.get('dual_hdmi')
                 hevc_decoder = rev_map.get('hevc')
-            print('supported', supported)
-            print('model', model)
+            LOG.INFO("utils", "supported %s" % supported)
+            LOG.INFO("utils", "model %s" % model)
     except:
         pass
 
